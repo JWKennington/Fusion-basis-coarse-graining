@@ -1,0 +1,46 @@
+Readme for Fusion Basis coarse graining
+
+by Sebastian Steinhaus (Perimeter Institute for Theoretical Physics)
+03/12/2019
+
+This algorithm to coarse grain q-deformed lattice gauge theories in (2+1)D,
+written in Julia 1.0 .
+
+This is the code for the algorihm described in arXiv:
+
+There exist 4 different variants of this algorithm, allowing all representations
+and torsion, allowing all representations and no torsion, allowing only integer
+representations and torsion and allowing only integer representations and no torsion.
+(See the paper for an explanation.)
+
+To run the code, navigate in your terminal to the folder of the version you want to run and execute:
+
+julia -L Fusion_vec.jl -e 'Fusion.main_vec(g);'
+
+This loads the main file 'Fusion_vec.jl' and executes the function 'main_vec(g)' in the module 'Fusion'.
+g is the coupling constant of the lattice gauge theory, g=0 is the weak coupling limit.
+
+Then the algorithm calculates the renormalization group flow of the main amplitude and the expectation
+values of so-called Ribbon operators.
+
+In the main function, you can find a parameter 'iterations', that sets how many iterations, i.e. RG steps,
+the algorithm is supposed to do. 3 iterations in the code correspond to coarse graining a cube into a
+coarser cube again.
+
+In the end, all results, i.e. singular values that parametrize the RG flow, and the expectation values of
+observables are printed as output. (This code was mainly used for clusters using slurm.)
+These can be read in e.g. by Mathematica, where one has to additionally split the values into different
+iterations, which depends on the size of the quantum group considered.
+
+The size, or level k of the quantum group, can be set in the file 'constants.jl'. The parameter p determines
+the level k, e.g.:
+
+p=8 -> k=2
+p=10 -> k=3
+p=12 -> k=4
+p=14 -> k=5 and so forth.
+
+Note that the k used in the actual algorithm is not necessarily the same as the level of the quantum group.
+
+The choice of p, i.e. how many representations are allowed, has dramatic effects on the performance. More representations
+imply that more memory and more computational time is required. See also the discussion in the paper. Increase at your own risk.
